@@ -1,5 +1,5 @@
 <?php
-    include "../db_config.php";
+    include "../db/db_config.php";
     
     function select_emotions_query() {
         $mysqli = connect_db();

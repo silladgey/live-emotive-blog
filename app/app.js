@@ -42,7 +42,7 @@ const loadEmotions = () => {
       }
     }
   };
-  httpRequest.open("GET", "service/emotion_service.php");
+  httpRequest.open("GET", "./service/emotion_service.php");
   httpRequest.send();
 };
 
@@ -63,7 +63,7 @@ const loadEntries = () => {
         blogEntriesContainer.appendChild(logEntryItem(entry));
     }
   };
-  httpRequest.open("GET", "service/entry_service.php");
+  httpRequest.open("GET", "./service/entry_service.php");
   httpRequest.send();
 };
 
@@ -82,7 +82,7 @@ const createEntry = (content, emotion = null) => {
       );
     }
   };
-  let serviceUrl = `service/entry_service.php?c=${content}`;
+  let serviceUrl = `./service/entry_service.php?c=${content}`;
   if (emotion) serviceUrl += `&e=${emotion.value}`;
   httpRequest.open("POST", serviceUrl);
   httpRequest.setRequestHeader(
@@ -139,7 +139,7 @@ const logEntryItem = (entry) => {
       entryEmotionImg.title = "";
       entryItemContainer.removeChild(entryImgContainer);
     };
-    entryEmotionImg.src = `res/emotion-images/${entry.emotionImg}`;
+    entryEmotionImg.src = `./res/emotion-images/${entry.emotionImg}`;
     entryEmotionImg.alt = `Feeling ${entry.emotion.toLowerCase()}`;
     entryEmotionImg.title = `Feeling ${entry.emotion.toLowerCase()}`;
     entryImgContainer.appendChild(entryEmotionImg);
