@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A simple live micro-blogging site with emotions."
+    />
+
+    <title>Emotive Blog</title>
+
+    <link href="res/images/favicon.png" rel="icon" type="image/png" />
+    <!-- CSS stylesheets -->
+    <link rel="stylesheet" href="./app/stylesheets/style.css" />
+    <!-- JS scripts -->
+    <script src="./app/app.js" defer></script>
+  </head>
+
+  <body>
+    <header class="container header__container">
+      <h1 class="header-title">Emotive Blog</h1>
+    </header>
+
+    <main class="container blog__container">
+      <form class="blog__entry-form" id="entry-form" method="post">
+        <div class="form-control entry__emotions">
+          <div class="entry_emotions-label">Choose emotion:</div>
+          <div class="entry__emotions-list"></div>
+        </div>
+        <div class="form-control entry__content">
+          <input
+            type="text"
+            name="content"
+            placeholder="Message"
+            autocomplete="off"
+          />
+          <input type="submit" id="submit" value="Post" />
+        </div>
+      </form>
+
+      <div class="blog__entries"></div>
+    </main>
+
+    <footer class="container footer__container"></footer>
+    <div class="top-left">
+      <a href="emoticon.html">Add New Emoticon</a>
+    </div>
+  </body>
+</html>
