@@ -1,19 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A simple live micro-blogging site with emotions."
+    />
+
     <title>Emotive Blog</title>
 
+    <link href="./app/res/favicon.ico" rel="icon" type="image/png" />
+    <!-- CSS stylesheets -->
     <link rel="stylesheet" href="./app/stylesheets/style.css" />
+    <!-- JS scripts -->
+    <script src="./app/app.js" defer></script>
   </head>
   <body>
-    <header></header>
+    <header class="container header__container">
+      <a href="./">
+        <h1 class="header-title">Emotive Blog</h1>
+      </a>
+    </header>
 
-    <main></main>
+    <main class="container add__emotion__container">
+        <h2 class="add__emotion-heading">Add New Emotion</h2>
+      </div>
 
-    <footer></footer>
-    <div class="top-left"><a href="./">Back To Home</a></div>
+      <form class="add__emotion-form" id="emotion-form" method="post">
+        <div class="form-control emotion__name">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="emotion-name"
+            placeholder="Happy"
+          />
+        </div>
+        <div class="form-control emotion__image">
+          <div class="emotion__image-label">Choose Image</div>
+          <div class="emotion__image-list">
+            <div class="radio-group">
+              <input type="radio" name="emotion-image" id="no-image" value="" />
+              <label for="no-image">No image</label>
+            </div>
+            <div class="radio-group">
+              <input
+                type="radio"
+                name="emotion-image"
+                id="emotion-1"
+                value="happy.png"
+              />
+              <label for="emotion-1"
+                ><img
+                  src="./app/res/emotion-images/happy.png"
+                  alt="Happy expression emotion image"
+                />
+              </label>
+            </div>
+            <div class="radio-group">
+              <input
+                type="radio"
+                name="emotion-image"
+                id="emotion-2"
+                value="sad.png"
+              />
+              <label for="emotion-2">
+                <img
+                  src="./app/res/emotion-images/sad.png"
+                  alt="Sad expression emotion image"
+                />
+              </label>
+            </div>
+            <div class="radio-group">
+              <input
+                type="radio"
+                name="emotion-image"
+                id="emotion-3"
+                value="hungry.png"
+              />
+              <label for="emotion-3">
+                <img
+                  src="./app/res/emotion-images/hungry.png"
+                  alt="Hungry expression emotion image"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-control">
+          <input type="submit" id="add-emotion" value="Add Emotion" />
+        </div>
+      </form>
+    </main>
+
+    <footer class="container footer__container">
+      <small>Made by Richard Szilagyi</small>
+    </footer>
   </body>
 </html>

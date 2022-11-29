@@ -11,16 +11,18 @@
 
     <title>Emotive Blog</title>
 
-    <link href="res/images/favicon.png" rel="icon" type="image/png" />
+    <link href="./app/res/favicon.ico" rel="icon" type="image/png" />
     <!-- CSS stylesheets -->
     <link rel="stylesheet" href="./app/stylesheets/style.css" />
     <!-- JS scripts -->
-    <script src="./app/app.js" defer></script>
+    <script src="./app/app.js" type="module" defer></script>
   </head>
 
   <body>
     <header class="container header__container">
-      <h1 class="header-title">Emotive Blog</h1>
+      <a href="./">
+        <h1 class="header-title">Emotive Blog</h1>
+      </a>
     </header>
 
     <main class="container blog__container">
@@ -36,14 +38,16 @@
             placeholder="Message"
             autocomplete="off"
           />
-          <input type="submit" id="submit" value="Post" />
+          <input type="submit" id="submit-entry" value="Post" />
         </div>
       </form>
 
       <div class="blog__entries"></div>
     </main>
 
-    <footer class="container footer__container"></footer>
+    <footer class="container footer__container">
+      <small>Made by Richard Szilagyi</small>
+    </footer>
     <div class="top-left">
       <a href="emoticon.html">Add New Emoticon</a>
     </div>

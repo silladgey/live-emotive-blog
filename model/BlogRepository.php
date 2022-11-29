@@ -33,9 +33,9 @@
             return array(
                 "id" => $entry->get_id(),
                 "content" => $entry->get_content(),
-                "datetime" => $entry->get_datetime(),
+                "posted" => $entry->get_datetime(),
                 "emotionImg" => $entry->get_emotion_image_url(),
-                "emotion" => $entry->get_emotion()
+                "emotionName" => $entry->get_emotion()
             );
         }
 
@@ -53,10 +53,10 @@
 
         public function entry_object($data) {
             // instantiate an entry object
-            $entry_id = $data["id"];
+            $entry_id = intval($data["id"]);
             $entry_content = $data["content"];
             $entry_datetime = $data["date_time"];
-            $entry_emotion = $data["emotion"];
+            $entry_emotion = $data["name"];
             $entry_emotion_image = $data["image"];
             $entry = new BlogEntry($entry_id, $entry_content, $entry_datetime);
             if ($entry_emotion) {
@@ -71,10 +71,10 @@
         public function populate_from_db() {
             // select entries from database
             $query = <<<SELECT_QUERY
-                SELECT `entry`.`id`, `entry`.`content`, `entry`.`date_time`, `emotion`.`image`, `emotion`.`emotion`
+                SELECT `entry`.`id`, `entry`.`content`, `entry`.`date_time`, `emotion`.`image`, `emotion`.`name`
                 FROM `emotive_blog_entry` AS `entry`
                 LEFT JOIN `emotive_blog_emotion` AS `emotion`
-                ON `emotion`.`id`=`entry`.`emotion_id`
+                ON `emotion`.`id`=`entry`.`emotion`
                 ORDER BY `entry`.`date_time` DESC;
             SELECT_QUERY;
             $result = $this->mysqli->query($query);
@@ -99,16 +99,9 @@
             $emotion = $this->mysqli->real_escape_string($emotion);
 
             $query = <<<INSERT_QUERY
-                INSERT INTO `emotive_blog_entry` (`content`)
-                VALUES ('$content');
-                INSERT_QUERY;
-
-            if ($emotion) {
-                $query = <<<INSERT_QUERY
-                    INSERT INTO `emotive_blog_entry` (`content`, `emotion_id`)
-                    VALUES ('$content', '$emotion');
-                    INSERT_QUERY;
-            }
+                INSERT INTO `emotive_blog_entry` (`content`, `emotion`)
+                VALUES ('$content', '$emotion');
+            INSERT_QUERY;
 
             $result = $this->mysqli->query($query);
             $last_id = $this->mysqli->insert_id;
@@ -119,10 +112,10 @@
         public function select_entry($id) {
             // select an entry from database
             $query = <<<SELECT_QUERY
-                SELECT `entry`.`id`, `entry`.`content`, `entry`.`date_time`, `emotion`.`image`, `emotion`.`emotion`
+                SELECT `entry`.`id`, `entry`.`content`, `entry`.`date_time`, `emotion`.`image`, `emotion`.`name`
                 FROM `emotive_blog_entry` AS `entry`
                 LEFT JOIN `emotive_blog_emotion` AS `emotion`
-                ON `emotion`.`id`=`entry`.`emotion_id`
+                ON `emotion`.`id`=`entry`.`emotion`
                 WHERE `entry`.`id`='$id';
             SELECT_QUERY;
 

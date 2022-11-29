@@ -1,29 +1,48 @@
 "use strict";
+import entries from "./entries.js";
 
-window.onload = (e) => {
-  loadEmotions();
-  loadEntries();
-};
+if (window.location.href.endsWith("/" || "index.html")) {
+  const submitEntryBtn = document.getElementById("submit-entry");
+  submitEntryBtn.addEventListener("click", (e) => {
+    e.preventDefault();
 
-const submitBtn = document.getElementById("submit");
-submitBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  const emotion = document.querySelector("input[name='emotion']:checked");
-  const content = document.querySelector("input[name='content']");
-  if (content.value) createEntry(content.value, emotion);
-  document.getElementById("entry-form").reset();
-});
+    const emotion = document.querySelector("input[name='emotion']:checked");
+    const content = document.querySelector("input[name='content']");
+
+    if (content.value && emotion) createEntry(content.value, emotion);
+
+    document.getElementById("entry-form").reset();
+  });
+}
+
+if (window.location.href.endsWith("emoticon.html")) {
+  const addEmotionBtn = document.getElementById("add-emotion");
+  addEmotionBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const emotionName = document.querySelector("input[name='emotion-name']");
+    const emotionImg = document.querySelector(
+      "input[name='emotion-image']:checked"
+    );
+
+    if (emotionName.value && emotionImg)
+      createEmotion(emotionName.value, emotionImg);
+
+    document.getElementById("emotion-form").reset();
+  });
+}
 
 const loadEmotions = () => {
   const emotionsContainer = document.querySelector(".entry__emotions-list");
   emotionsContainer.textContent = "Loading";
+
   const httpRequest = new XMLHttpRequest();
   httpRequest.onreadystatechange = () => {
     if (httpRequest.readyState == 4 && httpRequest.status == 200) {
       emotionsContainer.replaceChildren();
-      const emotions = JSON.parse(httpRequest.responseText);
+      const response = JSON.parse(httpRequest.responseText);
 
-      for (let emotion of emotions) {
+      for (let emotion of response) {
         const emotionsListItem = document.createElement("div");
         emotionsListItem.classList.add("emotions__list-item");
 
@@ -31,63 +50,92 @@ const loadEmotions = () => {
         emotionRadio.setAttribute("type", "radio");
         emotionRadio.setAttribute("name", "emotion");
         emotionRadio.setAttribute("value", emotion.id);
-        emotionRadio.setAttribute("id", emotion.emotion);
+        emotionRadio.setAttribute("id", emotion.name);
 
         const emotionLabel = document.createElement("label");
-        emotionLabel.setAttribute("for", emotion.emotion);
-        emotionLabel.textContent = emotion.emotion;
+        emotionLabel.setAttribute("for", emotion.name);
+        emotionLabel.textContent = emotion.name;
 
         emotionsListItem.append(emotionRadio, emotionLabel);
         emotionsContainer.appendChild(emotionsListItem);
       }
     }
   };
+
   httpRequest.open("GET", "./service/emotion_service.php");
   httpRequest.send();
 };
 
 const loadEntries = () => {
   const blogEntriesContainer = document.querySelector(".blog__entries");
+  blogEntriesContainer.replaceChildren();
+
   const blogEntriesText = document.createTextNode("Loading");
+
   const blogEntriesMessage = document.createElement("div");
   blogEntriesMessage.classList.add("blog__entries-message");
   blogEntriesMessage.appendChild(blogEntriesText);
   blogEntriesContainer.appendChild(blogEntriesMessage);
+
   const httpRequest = new XMLHttpRequest();
   httpRequest.onreadystatechange = () => {
     if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-      const entries = JSON.parse(httpRequest.responseText);
-      if (entries.length == 0) blogEntriesText.nodeValue = "No entries";
+      const response = JSON.parse(httpRequest.responseText);
+
+      if (response.length == 0) blogEntriesText.nodeValue = "No entries";
       else blogEntriesText.nodeValue = "";
-      for (let entry of entries)
+
+      for (let entry of response)
         blogEntriesContainer.appendChild(logEntryItem(entry));
     }
   };
+
   httpRequest.open("GET", "./service/entry_service.php");
   httpRequest.send();
 };
 
-const createEntry = (content, emotion = null) => {
+const updateEntries = () => {
+  // TODO
+};
+
+const createEntry = (content, emotion) => {
   const blogEntriesContainer = document.querySelector(".blog__entries");
   const httpRequest = new XMLHttpRequest();
+
   httpRequest.onreadystatechange = () => {
     // Process server response
     if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-      const entry = JSON.parse(httpRequest.responseText);
-      console.log(entry);
-      const entryItemContainer = logEntryItem(entry);
+      const response = JSON.parse(httpRequest.responseText);
+      const entryItemContainer = logEntryItem(response);
       blogEntriesContainer.insertBefore(
         entryItemContainer,
         blogEntriesContainer.firstChild
       );
     }
   };
-  let serviceUrl = `./service/entry_service.php?c=${content}`;
-  if (emotion) serviceUrl += `&e=${emotion.value}`;
-  httpRequest.open("POST", serviceUrl);
+
   httpRequest.setRequestHeader(
     "Content-Type",
     "application/x-www-form-urlencoded"
+  );
+
+  httpRequest.open(
+    "POST",
+    `./service/entry_service.php?c=${content}&e=${emotion.value}`
+  );
+
+  httpRequest.send();
+};
+
+const createEmotion = (name, image) => {
+  const httpRequest = new XMLHttpRequest();
+  httpRequest.setRequestHeader(
+    "Content-Type",
+    "application/x-www-form-urlencoded"
+  );
+  httpRequest.open(
+    "POST",
+    `./service/emotion_service.php?n=${name}&i=${image.value}`
   );
   httpRequest.send();
 };
@@ -107,13 +155,19 @@ const logEntryItem = (entry) => {
 
   const entryDateTimeContainer = document.createElement("div");
   entryDateTimeContainer.classList.add("entry__item-datetime");
-  const dateTimeText = document.createTextNode(entry.datetime);
+  const dateTimeText = document.createTextNode(entry.posted);
   entryDateTimeContainer.appendChild(dateTimeText);
 
   entryContentContainer.append(entryHeaderContainer, entryDateTimeContainer);
   entryItemContainer.appendChild(entryContentContainer);
 
-  if (entry.emotion) {
+  const entryObject = {
+    id: +entry.id,
+    content: entry.content,
+    posted: entry.posted,
+  };
+
+  if (entry.emotionName) {
     const entryEmotionContainer = document.createElement("div");
     entryEmotionContainer.classList.add("entry__item-emotion");
     entryContentContainer.insertBefore(
@@ -122,9 +176,11 @@ const logEntryItem = (entry) => {
     );
 
     const entryEmotionText = document.createTextNode(
-      `Feeling ${entry.emotion.toLowerCase()}`
+      `Feeling ${entry.emotionName.toLowerCase()}`
     );
     entryEmotionContainer.appendChild(entryEmotionText);
+
+    entryObject.emotionName = entry.emotionName;
   }
 
   if (entry.emotionImg) {
@@ -139,11 +195,21 @@ const logEntryItem = (entry) => {
       entryEmotionImg.title = "";
       entryItemContainer.removeChild(entryImgContainer);
     };
-    entryEmotionImg.src = `./res/emotion-images/${entry.emotionImg}`;
-    entryEmotionImg.alt = `Feeling ${entry.emotion.toLowerCase()}`;
-    entryEmotionImg.title = `Feeling ${entry.emotion.toLowerCase()}`;
+
+    entryEmotionImg.src = `./app/res/emotion-images/${entry.emotionImg}`;
+    entryEmotionImg.alt = `Feeling ${entry.emotionName.toLowerCase()}`;
+    entryEmotionImg.title = `Feeling ${entry.emotionName.toLowerCase()}`;
     entryImgContainer.appendChild(entryEmotionImg);
+
+    entryObject.emotionImg = entry.emotionImg;
   }
 
+  entries.push(entryObject);
   return entryItemContainer;
+};
+
+window.onload = () => {
+  loadEmotions();
+  loadEntries();
+  setInterval(updateEntries, 5000);
 };

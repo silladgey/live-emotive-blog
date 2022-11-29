@@ -11,16 +11,86 @@ body {
   color: #fff0f0;
 }
 
+input[type="text"] {
+  background: transparent;
+  border: #333a46 solid 2px;
+  color: #fff0f0;
+  font-size: 1rem;
+  width: 320px;
+}
+
+input[type="text"],
+input[type="submit"] {
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.8rem;
+  outline: none;
+  transition: all 500ms ease-in-out;
+}
+
+input[type="text"]:hover {
+  background: #333a4610;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="submit"] {
+  background: #fab462;
+  border: transparent solid 2px;
+  color: #1c1b22;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 0.8rem;
+  /* width: 80px; */
+}
+
+input[type="submit"]:hover {
+  background: transparent;
+  border: #fab462 solid 2px;
+  color: #fab462;
+}
+
+input[type="submit"]:active {
+  border: none;
+  color: #fff0f0;
+}
+
+a {
+  text-decoration: none;
+}
+
+label {
+  cursor: pointer;
+}
+
+.top-left {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 0.86rem;
+  font-weight: 300;
+  text-decoration: underline;
+}
+
+.top-left a {
+  color: #fff0f0;
+}
+
 .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 1rem auto;
   width: 100vw;
 }
 
-.header__container {
+.header__container,
+.footer__container,
+.add__emotion__container {
   margin-top: 4rem;
 }
 
-.header__container,
 .entry__emotions,
 .entry__content {
   display: flex;
@@ -28,12 +98,19 @@ body {
   justify-content: center;
 }
 
+.container,
+.add__emotion__container {
+  flex-direction: column;
+}
+
 .header-title {
   font-size: 2rem;
+  color: #fff0f0;
 }
 
 .entry__emotions {
-  flex-wrap: wrap;
+  margin: 0.6rem 0;
+  max-width: 448px;
 }
 
 .entry__emotions,
@@ -48,58 +125,22 @@ body {
 
 .entry__emotions-list {
   display: flex;
-  padding: 0.4rem 0.6rem;
-}
-
-.emotions__list-item {
-  margin: 0.6rem 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  margin: 1rem 0;
 }
 
 .emotions__list-item label {
+  border: transparent solid 2px;
+  border-radius: 0.6rem;
   color: #c94e03;
   font-size: 0.96rem;
-  margin-left: 0.6rem;
+  padding: 0.3rem 0.6rem;
 }
 
-.entry__content input[type="text"] {
-  background: transparent;
-  border: #333a46 solid 2px;
-  color: #fff0f0;
-  font-size: 1.2rem;
-  width: 320px;
-}
-
-.entry__content input[type="text"],
-.entry__content input[type="submit"] {
-  border-radius: 0.6rem;
-  padding: 0.4rem 0.8rem;
-  outline: none;
-  transition: all 500ms ease-in-out;
-}
-
-.entry__content input[type="text"]:hover {
-  background: #333a4610;
-}
-
-.entry__content input[type="submit"] {
-  background: #fab462;
-  border: transparent solid 2px;
-  color: #1c1b22;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-left: 0.8rem;
-  width: 80px;
-}
-
-.entry__content input[type="submit"]:hover {
-  background: transparent;
-  border: #fab462 solid 2px;
-  color: #fab462;
-}
-
-.entry__content input[type="submit"]:active {
-  border: none;
-  color: #fff0f0;
+.emotions__list-item input[type="radio"]:checked + label {
+  border: #c94e03 solid 2px;
 }
 
 .blog__entries {
@@ -109,8 +150,9 @@ body {
   margin: auto;
   margin-top: 4rem;
   max-height: 384px;
-  width: 448px;
+  max-width: 448px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .blog__entries-message {
@@ -122,6 +164,7 @@ body {
   gap: 0.8rem 1.2rem;
   align-content: flex-start;
   margin: 1rem;
+  width: 100%;
 }
 
 .entry__item-img img {
@@ -135,10 +178,15 @@ body {
   gap: 0.4rem 0.8rem;
 }
 
+.entry__item-content > div h3 {
+  display: block;
+  inline-size: 420px;
+  word-wrap: break-word;
+}
+
 .entry__item-emotion {
   color: #c94e03;
   font-size: 0.92rem;
-  /* font-style: italic; */
 }
 
 .entry__item-datetime {
@@ -147,15 +195,43 @@ body {
   font-style: italic;
 }
 
-.top-left {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  font-size: 0.86rem;
-  font-weight: 300;
-  text-decoration: underline;
+.add__emotion-heading {
+  font-size: 1.4rem;
 }
 
-.top-left a {
-  color: #fff0f0;
+.add__emotion-form {
+  margin-top: 2rem;
+}
+
+.add__emotion-form > div {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1rem;
+}
+
+.emotion__image-list {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.emotion__image-list > .radio-group > label {
+  border: transparent solid 10px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* display: inline-block; */
+  width: 100px;
+  height: 100px;
+  text-align: center;
+}
+
+.emotion__image-list > .radio-group > input[type="radio"]:checked + label {
+  border: #c94e03 solid 10px;
+}
+
+.emotion__image-list > .radio-group > label img {
+  width: 100%;
 }

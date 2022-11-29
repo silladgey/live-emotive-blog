@@ -3,19 +3,15 @@
 
     $blog = BlogRepository::get_instance();
 
-    function insert_entry_query($c, $e) {
+    function insert_entry_query($content, $emotion) {
         global $blog;
-        echo $blog->create_entry($c, $e);
+        echo $blog->create_entry($content, $emotion);
     }
 
-    if (isset($_REQUEST["c"])) {
+    if (isset($_REQUEST["c"]) && isset($_REQUEST["e"])) {
         $content = $_REQUEST["c"];
-        if (isset($_REQUEST["e"])) {
-            $emotion = $_REQUEST["e"];
-            insert_entry_query($content, $emotion);
-            return null;    
-        }
-        insert_entry_query($content, null);
+        $emotion = $_REQUEST["e"];
+        insert_entry_query($content, $emotion);
         return null;
     }
 
