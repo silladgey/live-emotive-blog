@@ -114,14 +114,14 @@ const createEntry = (content, emotion) => {
     }
   };
 
-  httpRequest.setRequestHeader(
-    "Content-Type",
-    "application/x-www-form-urlencoded"
-  );
-
   httpRequest.open(
     "POST",
     `./service/entry_service.php?c=${content}&e=${emotion.value}`
+  );
+
+  httpRequest.setRequestHeader(
+    "Content-Type",
+    "application/x-www-form-urlencoded"
   );
 
   httpRequest.send();
@@ -129,14 +129,16 @@ const createEntry = (content, emotion) => {
 
 const createEmotion = (name, image) => {
   const httpRequest = new XMLHttpRequest();
-  httpRequest.setRequestHeader(
-    "Content-Type",
-    "application/x-www-form-urlencoded"
-  );
   httpRequest.open(
     "POST",
     `./service/emotion_service.php?n=${name}&i=${image.value}`
   );
+
+  httpRequest.setRequestHeader(
+    "Content-Type",
+    "application/x-www-form-urlencoded"
+  );
+
   httpRequest.send();
 };
 
