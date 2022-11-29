@@ -4,11 +4,11 @@
     function connect_db() {
         global $db_config;
         $db_host = $db_config["DB_HOST"];
-        $db_user = $db_config["DB_USERNAME"];
+        $db_user = $db_config["DB_USER"];
         $db_password = $db_config["DB_PASSWORD"];
-        $db = $db_config["DB"];
+        $db_name = $db_config["DB_NAME"];
 
-        $conn = new mysqli($db_host, $db_user, $db_password, $db) or die("Connection failed: " . $conn->error);
+        $conn = new mysqli($db_host, $db_user, $db_password, $db_name) or die("Connection failed: " . $conn->error);
         $conn->set_charset("utf8mb4");
         return $conn;
     }
